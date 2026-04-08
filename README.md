@@ -1,7 +1,5 @@
 
 # CSCE463 Networks - Project 3
-
-
 **Technologies**
 - Docker Conatiners
 - Apache Kafka
