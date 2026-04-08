@@ -7,7 +7,6 @@
 - Apache Kafka
 
 
-
 Sensors:
 - Temperature - detection of abnormal temperature readings
 - Virbation - detection of abnormal vibrations
@@ -33,3 +32,18 @@ Current Repo Structure:
 
 6 directories, 4 files
 ```
+
+
+# Checklist
+- [ ] Develop Consumers & Producers
+    - [ ] Vibration Producer
+    - [ ] Temperature Producer
+    - [ ] Vibration Consumer
+    - [ ] Temperature Consumer
+- [ ] Containerize
+    - [ ] Containerize producers and consumers
+    - [ ] Setup Apache Kafka 
+    - [ ] Link all containerized processes together 
+- [ ] Testing
+    - [ ] Test if system scales 
+    - [ ] Distributed -- some containers on one machine, other containers on a different machine
