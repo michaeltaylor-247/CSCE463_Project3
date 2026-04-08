@@ -1,5 +1,5 @@
 
-# CSCE463 Networks and Distrubuted Processings Project 3
+# CSCE463 Networks - Project 3
 
 
 **Technologies**
@@ -9,8 +9,8 @@
 
 
 Sensors:
-- Temperature - detection of abnormal temperature readings
-- Virbation - detection of abnormal vibrations
+- Temperature - detection of abnormal temperature readings --> **Michael**
+- Vibration - detection of abnormal vibrations --> **Evan**
 
 Technical Components:
 - Kafka Broker; containerized
