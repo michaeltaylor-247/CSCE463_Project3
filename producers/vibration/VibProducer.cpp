@@ -1,37 +1,28 @@
 #include "VibProducer.h"
 #include <chrono>
 
-VibProducer::VibProducer() : gen(std::random_device{}()) {
-    // Generator initialized with random_device for better entropy
-}
+VibProducer::VibProducer() : gen(std::random_device{}()) {}
 
 Event VibProducer::produce() {
     std::uniform_int_distribution<> tierDist(1, 100);
     int roll = tierDist(gen);
-    
-    int value = 0;
+    int value;
 
-    // Vibration logic per requirements:
+    // Implementation of 50/40/10 probability 
     if (roll <= 50) {
-        // 50% chance: 1-10 mm 
-        value = std::uniform_int_distribution<>(1, 10)(gen);
+        value = std::uniform_int_distribution<>(1, 10)(gen); // 50% chance 
     } 
     else if (roll <= 90) {
-        // 40% chance: 11-30 mm 
-        value = std::uniform_int_distribution<>(11, 30)(gen);
+        value = std::uniform_int_distribution<>(11, 30)(gen); // 40% chance 
     } 
     else {
-        // 10% chance: 31-50 mm 
-        value = std::uniform_int_distribution<>(31, 50)(gen);
+        value = std::uniform_int_distribution<>(31, 50)(gen); // 10% chance 
     }
-
-    // Create the struct and manually assign values
+    // Create an Event object and populate it with the generated reading and current timestamp
     Event ev;
-    ev.sensor = VIBRATION; // Uses the enum from Event.h
-    ev.reading = value;    // Event.h expects an int, no string conversion needed
+    ev.sensor = VIBRATION; 
+    ev.reading = value;    
+    ev.timestamp = std::chrono::system_clock::now().time_since_epoch().count(); 
     
-    // Generate a simple timestamp using system clock
-    ev.timestamp = std::chrono::system_clock::now().time_since_epoch().count();
-
-    return ev; 
+    return ev;
 }
