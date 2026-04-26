@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <time.h>
 #include <unistd.h>
@@ -19,7 +18,7 @@ int main() {
         std::string timeStr = ctime(&raw);
         timeStr.pop_back(); // removes '\n' that ctime() automatically inserts
 
-        std::cout << timeStr << " [TEMPERATURE] " << e.reading << "F" << std::endl;
+        std::cout << "[TEMPERATURE] " << timeStr << " " << e.reading << "F" << std::endl;
         sleep(1);
     }
 
