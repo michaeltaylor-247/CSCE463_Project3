@@ -5,24 +5,26 @@
 #include "../../utility/Event.h"
 
 int main() {
-    VibProducer producer;
-    while(true){
+    // Get broker from environment variable set in docker-compose.yml
+    const char* broker_env = std::getenv("KAFKA_BROKER");
+    std::string brokers = (broker_env != nullptr) ? broker_env : "localhost:9092";
+
+    VibProducer producer(brokers);
+
+    while(true) {
         Event ev = producer.produce();
-        int value = ev.reading;
+       
+        // Send the generated event to Kafka
+        producer.send(ev);
+
         std::string tier;
-        if (value >= 1 && value <= 10) {
-            tier = "GREEN TIER";
-        } else if (value >= 11 && value <= 30) {
-            tier = "YELLOW TIER";
-        } else if (value >= 31 && value <= 50) {
-            tier = "RED TIER";
-        }
-        std::string sensorType = (ev.sensor == VIBRATION) ? "VIBRATION" : "UNKNOWN";
-        std::cout << "Sensor: " << sensorType << "] "
-                    << "Timestamp: " << ev.timestamp << ", "
-                    << "Reading: " << ev.reading << ", "
-                    << "Tier: " << tier << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2)); // Sleep for 2 seconds
+        if (ev.reading <= 10) tier = "GREEN TIER";
+        else if (ev.reading <= 30) tier = "YELLOW TIER";
+        else if (ev.reading >= 31 && ev.reading <= 50) tier = "RED TIER";
+
+        std::cout << "[VIBRATION] Reading: " << ev.reading << " [" << tier << "]" << std::endl;
+        
+        std::this_thread::sleep_for(std::chrono::seconds(2)); 
     }
     return 0;
 }
