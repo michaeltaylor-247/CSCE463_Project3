@@ -7,7 +7,7 @@
 #include <librdkafka/rdkafkacpp.h>
 #include "../utility/Event.h"
 
-class KafkaClient {
+class KafkaProducer {
     private:
         RdKafka::Producer* producer; // Kafka Producer Instance
         RdKafka::Topic* topic_;
@@ -15,8 +15,8 @@ class KafkaClient {
         
     public:
         // Class Things
-        KafkaClient();
-        ~KafkaClient();
+        KafkaProducer();
+        ~KafkaProducer();
 
         // Actual Functionality
         void pushEvent(Event* e);

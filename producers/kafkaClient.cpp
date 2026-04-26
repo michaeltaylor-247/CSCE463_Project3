@@ -5,7 +5,7 @@
 // ---------------------
 // Class Things
 // ---------------------
-KafkaClient::KafkaClient() {
+KafkaProducer::KafkaProducer() {
     // Create Configuration Object
     RdKafka::Conf* config = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
 
@@ -20,7 +20,7 @@ KafkaClient::KafkaClient() {
 // ------------------------
 // Functionality
 // ------------------------
-void KafkaClient::pushEvent(Event* e) {
+void KafkaProducer::pushEvent(Event* e) {
     producer->produce(
             topic_,                             // topic
             RdKafka::Topic::PARTITION_UA,       // partition
