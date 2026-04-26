@@ -1,8 +1,8 @@
-#ifndef KAFKACLIENT
-#define KAFKACLIENT
+#ifndef KAFKA_PRODUCER_H
+#define KAFKA_PRODUCER_H
 
 #include <iostream>
-#include <memory> 
+#include <memory>
 
 #include <librdkafka/rdkafkacpp.h>
 #include "../utility/Event.h"
@@ -22,4 +22,4 @@ class KafkaProducer {
         void pushEvent(Event* e);
 };
 
-#endif // KAFKACLIENT
+#endif // KAFKA_PRODUCER_H

@@ -34,7 +34,6 @@ Event VibProducer::produce() {
 
     // Assign values to the event
     Event ev;
-    ev.sensor = VIBRATION; 
     ev.reading = value;    
     
     // Generate a simple timestamp using system clock

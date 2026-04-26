@@ -4,11 +4,6 @@
 
 #include <cstdint>
 
-enum Sensor {
-    TEMPERATURE,
-    VIBRATION
-};
-
 typedef struct Event {
     int64_t timestamp;
     int reading;

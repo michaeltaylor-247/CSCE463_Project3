@@ -1,4 +1,4 @@
-#include "kafkaClient.h"
+#include "KafkaProducer.h"
 #include <cstdlib>
 #include <librdkafka/rdkafkacpp.h>
 
@@ -32,4 +32,3 @@ void KafkaProducer::pushEvent(Event* e) {
     );
     producer->poll(0);
 }
-
