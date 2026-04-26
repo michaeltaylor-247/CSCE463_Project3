@@ -5,17 +5,10 @@
 #include "../../utility/Event.h"
 
 int main() {
-    // Get broker from environment variable set in docker-compose.yml
-    const char* broker_env = std::getenv("KAFKA_BROKER");
-    std::string brokers = (broker_env != nullptr) ? broker_env : "localhost:9092";
-
-    VibProducer producer(brokers);
+    VibProducer producer;
 
     while(true) {
         Event ev = producer.produce();
-       
-        // Send the generated event to Kafka
-        producer.send(ev);
 
         std::string tier;
         if (ev.reading <= 10) tier = "GREEN TIER";
