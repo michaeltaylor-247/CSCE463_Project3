@@ -1,0 +1,87 @@
+# Docker Compose file for a single-node Kafka system using KRaft mode.
+# Each service (Kafka broker, producers, consumers) runs in its own container.
+
+services:
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka_broker
+    ports:
+      - "9092:9092" # Expose Kafka broker for producers and consumers.
+    environment:
+      # Kafka running in KRaft mode
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093" # Running 1 controller node
+      KAFKA_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092" # All services are on the same Docker network
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      KAFKA_METADATA_LOG_DIR: "/var/lib/kafka/metadata"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    volumes:
+      - kafka_data:/var/lib/kafka
+    networks:
+      - kafka_network
+
+  # Temperature Producer Container
+  producer_temp:
+    build:
+      context: .
+    container_name: producer_temp
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKER: "kafka:9092"
+      PRODUCER_TOPIC: "factory.sensors.temperature"
+    command: ["./build/temp_producer"]
+    networks:
+      - kafka_network
+
+  # Virbration Producer Container
+  producer_vibration:
+    build:
+      context: .
+    container_name: producer_vibration
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKER: "kafka:9092"
+      PRODUCER_TOPIC: "factory.sensors.vibration"
+    command: ["./build/vib_producer"]
+    networks:
+      - kafka_network
+
+  # 
+  # Temperature Consumer Container
+  #   build:
+  #     context: .
+  #   container_name: consumer_temp
+  #   depends_on:
+  #     - kafka
+  #   environment:
+  #     KAFKA_BROKER: "kafka:9092"
+  #     CONSUMER_TOPICS: "factory.sensors.temperature"
+  #   command: ["./build/temp_consumer"]
+  #   networks:
+  #     - kafka_network
+
+  # Vibration Consumer Container
+  #   build:
+  #     context: .
+  #   container_name: consumer_vibration
+  #   depends_on:
+  #     - kafka
+  #   environment:
+  #     KAFKA_BROKER: "kafka:9092"
+  #     CONSUMER_TOPICS: "factory.sensors.vibration"
+  #   command: ["./build/vib_consumer"]
+  #   networks:
+  #     - kafka_network
+
+volumes:
+  kafka_data:
+
+networks:
+  kafka_network:
