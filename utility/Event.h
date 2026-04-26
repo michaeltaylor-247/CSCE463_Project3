@@ -10,7 +10,6 @@ enum Sensor {
 };
 
 typedef struct Event {
-    Sensor sensor;
     int64_t timestamp;
     int reading;
 } Event;
