@@ -1,8 +1,11 @@
 #include "KafkaProducer.h"
 
-#include <cstdlib>
+#include <cstdlib>   // getenv()
 #include <iostream>
 
+// --------------------
+// Class Things
+// ---------------------
 KafkaProducer::KafkaProducer() : producer(nullptr) {
     // Read from environment and get Config Parameters
     const char* broker_env = std::getenv("KAFKA_BROKER");
@@ -53,6 +56,11 @@ std::string KafkaProducer::serializeEvent(const Event& event) {
 }
 
 void KafkaProducer::pushEvent(const Event& event) {
+    if(producer == nullptr) {
+        std::cerr << "Kafka producer is not initialized" << std::endl;
+        return;
+    }
+
     // Format the Event for Kafka Broker
     std::string payload = serializeEvent(event);
 
@@ -70,7 +78,7 @@ void KafkaProducer::pushEvent(const Event& event) {
     );
 
     // Check if Kafka produce() failed
-    if (result != RdKafka::ERR_NO_ERROR) {
+    if(result != RdKafka::ERR_NO_ERROR) {
         std::cerr << "Failed to produce message: " << RdKafka::err2str(result) << std::endl;
         return;
     }

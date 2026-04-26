@@ -11,7 +11,7 @@ int main() {
     TempProducer sensor;
     KafkaProducer kafkaProducer;
 
-    while (true) {
+    while(true) {
         Event e = sensor.produce();
         kafkaProducer.pushEvent(e);
 

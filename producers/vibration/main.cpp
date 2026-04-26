@@ -7,16 +7,18 @@
 #include "../../utility/Event.h"
 
 int main() {
+    // Init Sensor & KafkaClient 
     VibProducer sensor;
     KafkaProducer kafkaProducer;
 
-    while (true) {
+    while(true) {
         Event e = sensor.produce();
         kafkaProducer.pushEvent(e);
-
+        
+        // cout for debug
         std::string tier;
-        if (e.reading <= 10) tier = "GREEN TIER";
-        else if (e.reading <= 30) tier = "YELLOW TIER";
+        if(e.reading <= 10) tier = "GREEN TIER";
+        else if(e.reading <= 30) tier = "YELLOW TIER";
         else tier = "RED TIER";
 
         time_t raw = static_cast<time_t>(e.timestamp);
