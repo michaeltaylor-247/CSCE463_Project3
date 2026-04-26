@@ -11,7 +11,6 @@ Event TempProducer::produce() {
 
     // Create a Temperature Event (sensor reading)
     Event e = {
-        Sensor::TEMPERATURE,
         timestamp,
         dist(gen)
     };
