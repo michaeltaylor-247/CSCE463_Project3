@@ -8,7 +8,11 @@
 
 class VibProducer {
 private:
-    std::mt19937 gen; // rng engine
+    std::mt19937 gen;                       // rng engine
+    std::uniform_int_distribution<> tierDist;
+    std::uniform_int_distribution<> lowDist;
+    std::uniform_int_distribution<> mediumDist;
+    std::uniform_int_distribution<> highDist;
 
 public:
     VibProducer();

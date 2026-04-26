@@ -1,25 +1,24 @@
 #ifndef KAFKA_PRODUCER_H
 #define KAFKA_PRODUCER_H
 
-#include <iostream>
-#include <memory>
+#include <string>
 
 #include <librdkafka/rdkafkacpp.h>
 #include "../utility/Event.h"
 
 class KafkaProducer {
-    private:
-        RdKafka::Producer* producer; // Kafka Producer Instance
-        RdKafka::Topic* topic_;
+private:
+    RdKafka::Producer* producer; // Kafka producer instance
+    std::string topic_;
 
-        
-    public:
-        // Class Things
-        KafkaProducer();
-        ~KafkaProducer();
+public:
+    // Class Things
+    KafkaProducer();
+    ~KafkaProducer();
 
-        // Actual Functionality
-        void pushEvent(Event* e);
+    // Functionality
+    void pushEvent(const Event& event);
+    std::string serializeEvent(const Event& event);
 };
 
 #endif // KAFKA_PRODUCER_H

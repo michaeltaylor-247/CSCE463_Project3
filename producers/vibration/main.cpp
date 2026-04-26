@@ -1,23 +1,26 @@
 #include <iostream>
-#include <thread>
-#include <chrono>
+#include <time.h>
+#include <unistd.h>
+
 #include "VibProducer.h"
+#include "../../kafka/KafkaProducer.h"
 #include "../../utility/Event.h"
 
 int main() {
-    VibProducer producer;
+    VibProducer sensor;
+    KafkaProducer kafkaProducer;
 
     while(true) {
-        Event ev = producer.produce();
-
-        std::string tier;
-        if (ev.reading <= 10) tier = "GREEN TIER";
-        else if (ev.reading <= 30) tier = "YELLOW TIER";
-        else if (ev.reading >= 31 && ev.reading <= 50) tier = "RED TIER";
-
-        std::cout << "[VIBRATION] Reading: " << ev.reading << " [" << tier << "]" << std::endl;
+        Event e = sensor.produce();
+        kafkaProducer.pushEvent(e);
         
-        std::this_thread::sleep_for(std::chrono::seconds(2)); 
+        time_t raw = static_cast<time_t>(e.timestamp);
+        std::string timeStr = ctime(&raw);
+        timeStr.pop_back(); // removes '\n' that ctime() automatically inserts
+
+        std::cout << "[VIBRATION] " << timeStr << " " << e.reading << "mm" << std::endl;
+        sleep(1);
     }
+
     return 0;
 }
