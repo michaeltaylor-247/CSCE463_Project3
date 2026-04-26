@@ -13,7 +13,7 @@ int main() {
 
     while(true) {
         Event ev = producer.produce();
-        
+       
         // Send the generated event to Kafka
         producer.send(ev);
 

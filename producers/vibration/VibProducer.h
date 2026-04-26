@@ -9,9 +9,9 @@
 
 class VibProducer {
 private:
-    std::mt19937 gen;                           // rng engine
-    RdKafka::Producer* producer; // Kafka producer instance
-    std::string topic = "factory.sensors.vibration"; // Kafka topic for vibration data
+    std::mt19937 gen;                                   // rng engine
+    RdKafka::Producer* producer;                        // Kafka producer instance
+    std::string topic = "factory.sensors.vibration";    // Kafka topic for vibration data
 
 public:
     VibProducer(const std::string& brokers); //Constructor to initialize the Kafka producer with the given broker list

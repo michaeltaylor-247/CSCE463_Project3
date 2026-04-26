@@ -20,20 +20,16 @@ VibProducer::VibProducer(const std::string& brokers) {
 Event VibProducer::produce() {
     std::uniform_int_distribution<> tierDist(1, 100);
     int roll = tierDist(gen);
-    
-    int value = 0;
+    int value;
 
     if (roll <= 50) {
-        // 50% chance: 1-10 mm 
-        value = std::uniform_int_distribution<>(1, 10)(gen);
+        value = std::uniform_int_distribution<>(1, 10)(gen); // 50% chance 
     } 
     else if (roll <= 90) {
-        // 40% chance: 11-30 mm 
-        value = std::uniform_int_distribution<>(11, 30)(gen);
+        value = std::uniform_int_distribution<>(11, 30)(gen); // 40% chance 
     } 
     else {
-        // 10% chance: 31-50 mm 
-        value = std::uniform_int_distribution<>(31, 50)(gen);
+        value = std::uniform_int_distribution<>(31, 50)(gen); // 10% chance 
     }
 
     // Assign values to the event
