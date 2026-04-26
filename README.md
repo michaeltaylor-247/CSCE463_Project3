@@ -6,21 +6,19 @@ Built using C/C++, Apache Kafka, and conatinerized.
 
 ----
 #### Repo Structure:
+
 ```
 .
-├── AGENT.md
 ├── CMakeLists.txt
+├── Dockerfile
 ├── Makefile
 ├── README.md
-├── config
-│   ├── Config.cpp
-│   └── Config.h
 ├── consumers
 │   ├── temperature
 │   │   └── main.cpp
 │   └── vibration
 │       └── main.cpp
-├── docker_compose.yaml
+├── docker-compose.yaml
 ├── kafka
 │   ├── KafkaProducer.cpp
 │   └── KafkaProducer.h
@@ -34,12 +32,8 @@ Built using C/C++, Apache Kafka, and conatinerized.
 │       ├── VibProducer.cpp
 │       ├── VibProducer.h
 │       └── main.cpp
-├── specSheet.md
 └── utility
     └── Event.h
-
-9 directories, 20 files
-
 ```
 ----
 
