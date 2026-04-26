@@ -3,13 +3,16 @@
 #include <unistd.h>
 
 #include "VibProducer.h"
+#include "../../kafka/KafkaProducer.h"
 #include "../../utility/Event.h"
 
 int main() {
     VibProducer sensor;
+    KafkaProducer kafkaProducer;
 
-    while(true) {
+    while (true) {
         Event e = sensor.produce();
+        kafkaProducer.pushEvent(e);
 
         std::string tier;
         if (e.reading <= 10) tier = "GREEN TIER";
@@ -18,8 +21,9 @@ int main() {
 
         time_t raw = static_cast<time_t>(e.timestamp);
         std::string timeStr = ctime(&raw);
-        timeStr.pop_back();  // removes '\n' that ctime() automatically inserts
-        std::cout << timeStr << " " << e.reading << " [" << tier << "]" << std::endl;
+        timeStr.pop_back(); // removes '\n' that ctime() automatically inserts
+
+        std::cout << timeStr << " [VIBRATION] " << e.reading << "mm [" << tier << "]" << std::endl;
         sleep(1);
     }
 
