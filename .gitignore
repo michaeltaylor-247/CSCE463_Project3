@@ -1,4 +1,7 @@
+# Build stuff
 /build
-/.cache
 compile_commands.json
+/.cache
 
+# Secret
+.env

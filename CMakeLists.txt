@@ -28,12 +28,16 @@ set(PROJECT_WARNINGS
 #       - this is why "Event.h" doesn't need to be linked against; its not compiled, just a header w/declarations
 # -------------------------------------------
 # Link the Kafka Producer Class against the Apache Kafka Libary
-add_library(kafka_producer kafka/KafkaProducer.cpp)
+add_library(kafka_producer
+    kafka/KafkaProducer.cpp
+)
 target_link_libraries(kafka_producer PUBLIC PkgConfig::RDKAFKA)
 target_compile_options(kafka_producer PRIVATE ${PROJECT_WARNINGS})
 
 # Link the Kafka Consumer Class against the Apache Kafka Library
-add_library(kafka_consumer kafka/KafkaConsumer.cpp)
+add_library(kafka_consumer
+    kafka/KafkaConsumer.cpp
+)
 target_link_libraries(kafka_consumer PUBLIC PkgConfig::RDKAFKA)
 target_compile_options(kafka_consumer PRIVATE ${PROJECT_WARNINGS})
 
