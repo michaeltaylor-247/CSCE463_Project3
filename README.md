@@ -49,6 +49,39 @@ Follow consumer logs only:
 docker compose logs -f consumer_temp consumer_vibration
 ```
 
+### Important Note About Scaling
+Scaling will create multiple producer / consumer containers, but you may not see output from every replica.
+
+- Producer replicas will usually stay quiet in the console because the producer `main.cpp` files do not print readings anymore.
+- Consumer replicas for the same topic all share the same consumer group from `.env`.
+- Each topic currently uses one partition by default.
+- In Kafka, only one consumer in a group can actively read from a given partition at a time.
+
+So if you scale:
+
+```bash
+docker compose up --build --scale consumer_temp=3 --scale consumer_vibration=3
+```
+
+you should expect:
+- one `consumer_temp` replica to actively print temperature readings
+- one `consumer_vibration` replica to actively print vibration readings
+- the other replicas to be running, but mostly idle
+
+To check all running replicas:
+
+```bash
+docker compose ps
+```
+
+To inspect logs from a specific replica:
+
+```bash
+docker logs -f project3-consumer_temp-1
+docker logs -f project3-consumer_temp-2
+docker logs -f project3-consumer_vibration-1
+```
+
 ## Distributed Test
 For the distributed two-machine test, update `.env` before starting containers.
 
@@ -107,4 +140,3 @@ Both machines must be on the same network, and port `9092` must be reachable fro
 └── .env
 ```
 ----
-
