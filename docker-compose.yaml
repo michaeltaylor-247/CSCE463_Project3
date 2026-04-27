@@ -53,32 +53,35 @@ services:
     networks:
       - kafka_network
 
-  # 
   # Temperature Consumer Container
-  #   build:
-  #     context: .
-  #   container_name: consumer_temp
-  #   depends_on:
-  #     - kafka
-  #   environment:
-  #     KAFKA_BROKER: "kafka:9092"
-  #     CONSUMER_TOPICS: "factory.sensors.temperature"
-  #   command: ["./build/temp_consumer"]
-  #   networks:
-  #     - kafka_network
+  consumer_temp:
+    build:
+      context: .
+    container_name: consumer_temp
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKER: "kafka:9092"
+      CONSUMER_TOPIC: "factory.sensors.temperature"
+      CONSUMER_GROUP: "temp_consumer_group"
+    command: ["./build/temp_consumer"]
+    networks:
+      - kafka_network
 
   # Vibration Consumer Container
-  #   build:
-  #     context: .
-  #   container_name: consumer_vibration
-  #   depends_on:
-  #     - kafka
-  #   environment:
-  #     KAFKA_BROKER: "kafka:9092"
-  #     CONSUMER_TOPICS: "factory.sensors.vibration"
-  #   command: ["./build/vib_consumer"]
-  #   networks:
-  #     - kafka_network
+  consumer_vibration:
+    build:
+      context: .
+    container_name: consumer_vibration
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKER: "kafka:9092"
+      CONSUMER_TOPIC: "factory.sensors.vibration"
+      CONSUMER_GROUP: "vib_consumer_group"
+    command: ["./build/vib_consumer"]
+    networks:
+      - kafka_network
 
 volumes:
   kafka_data:

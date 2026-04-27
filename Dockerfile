@@ -11,6 +11,6 @@ WORKDIR /app
 
 COPY . .
 
+RUN rm -rf build
 RUN cmake -S . -B build
 RUN cmake --build build
-
