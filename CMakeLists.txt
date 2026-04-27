@@ -32,6 +32,11 @@ add_library(kafka_producer kafka/KafkaProducer.cpp)
 target_link_libraries(kafka_producer PUBLIC PkgConfig::RDKAFKA)
 target_compile_options(kafka_producer PRIVATE ${PROJECT_WARNINGS})
 
+# Link the Kafka Consumer Class against the Apache Kafka Library
+add_library(kafka_consumer kafka/KafkaConsumer.cpp)
+target_link_libraries(kafka_consumer PUBLIC PkgConfig::RDKAFKA)
+target_compile_options(kafka_consumer PRIVATE ${PROJECT_WARNINGS})
+
 # -----------------------------------------------------
 # Executables (4 total, one for each sensor consumer/producer)
 # -------------------------------------------------------
@@ -53,11 +58,17 @@ target_link_libraries(vib_producer PRIVATE kafka_producer)
 target_compile_options(vib_producer PRIVATE ${PROJECT_WARNINGS})
 
 # Temperature Consumer
-#add_executable(temp_consumer
-#    consumers/temperature/main.cpp
-#)
+add_executable(temp_consumer
+    consumers/temperature/main.cpp
+    consumers/temperature/TempConsumer.cpp
+)
+target_link_libraries(temp_consumer PRIVATE kafka_consumer)
+target_compile_options(temp_consumer PRIVATE ${PROJECT_WARNINGS})
 
 # Vibration Consumer
-#add_executable(vib_consumer
-#    consumers/vibration/main.cpp
-#)
+add_executable(vib_consumer
+    consumers/vibration/main.cpp
+    consumers/vibration/VibConsumer.cpp
+)
+target_link_libraries(vib_consumer PRIVATE kafka_consumer)
+target_compile_options(vib_consumer PRIVATE ${PROJECT_WARNINGS})
