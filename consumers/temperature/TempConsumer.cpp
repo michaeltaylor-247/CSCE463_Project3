@@ -1,5 +1,7 @@
 #include "TempConsumer.h"
 
+#include <iomanip>
+#include <sstream>
 
 // -------------------
 // Class Things
@@ -19,21 +21,36 @@ std::string TempConsumer::consume(const Event& event) {
         readings_.pop_front();
     }
 
+    const char* color_prefix = "";
+    const char* color_reset = "";
+    std::string average_field = "N/A";
+    std::string status_field = "BUFFERING";
+
     // Using an string stream to buffer the the output
     std::ostringstream output;
-    output << "[TEMPERATURE] Reading: " << event.reading << "F";
+    if(readings_.size() == 10) {
+        double average = static_cast<double>(rolling_sum_) / static_cast<double>(readings_.size());
 
-    if(readings_.size() < 10) {
-        output << " | buffering window " << readings_.size() << "/10";
-        return output.str();
+        std::ostringstream avg_stream;
+        avg_stream << average << "F";
+        average_field = avg_stream.str();
+
+        status_field = "OK";
+        color_prefix = "\033[32m";
+        color_reset = "\033[0m";
+        if(average > 73.0) {
+            color_prefix = "\033[33m";
+            color_reset = "\033[0m";
+            status_field = "WARNING";
+        }
     }
 
-    double average = static_cast<double>(rolling_sum_) / static_cast<double>(readings_.size());
-    output << " | avg(10): " << average << "F";
-
-    if(average > 73.0) {
-        output << " | WARNING: overheating threshold exceeded";
-    }
+    output << color_prefix
+           << "[TEMP]"
+           << " reading = " << std::left << std::setw(5) << (std::to_string(event.reading) + "F")
+           << " | " << std::setw(8) << average_field
+           << " | " << status_field
+           << color_reset;
 
     return output.str();
 }

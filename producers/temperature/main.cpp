@@ -1,5 +1,3 @@
-#include <iostream>
-#include <time.h>
 #include <unistd.h>
 
 #include "TempProducer.h"
@@ -13,12 +11,6 @@ int main() {
     while(true) {
         Event e = sensor.produce();
         kafkaProducer.pushEvent(e);
-
-        time_t raw = static_cast<time_t>(e.timestamp);
-        std::string timeStr = ctime(&raw);
-        timeStr.pop_back(); // removes '\n' that ctime() automatically inserts
-
-        std::cout << "[TEMPERATURE] " << timeStr << " " << e.reading << "F" << std::endl;
         sleep(1);
     }
 
