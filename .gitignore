@@ -4,4 +4,4 @@ compile_commands.json
 /.cache
 
 # Secret
-.env
+#.env
