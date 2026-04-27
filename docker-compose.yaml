@@ -4,7 +4,6 @@
 services:
   kafka:
     image: apache/kafka:latest
-    container_name: kafka_broker
     ports:
       - "9092:9092" # Expose Kafka broker for producers and consumers.
     environment:
@@ -13,7 +12,7 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093" # Running 1 controller node
       KAFKA_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092" # All services are on the same Docker network
+      KAFKA_ADVERTISED_LISTENERS: "${BROKER_ADVERTISED_LISTENER}" # All services are on the same Docker network
       KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
       KAFKA_LOG_DIRS: "/var/lib/kafka/data"
       KAFKA_METADATA_LOG_DIR: "/var/lib/kafka/data"
@@ -29,12 +28,14 @@ services:
   producer_temp:
     build:
       context: .
-    container_name: producer_temp
     depends_on:
       - kafka
+    env_file:
+      - .env
     environment:
-      KAFKA_BROKER: "kafka:9092"
-      PRODUCER_TOPIC: "factory.sensors.temperature"
+      KAFKA_BROKER: "${KAFKA_BROKER}"
+      PRODUCER_TOPIC: "${TEMP_PRODUCER_TOPIC}"
+      PRODUCER_INTERVAL: "${TEMP_PRODUCER_INTERVAL}"
     command: ["./build/temp_producer"]
     networks:
       - kafka_network
@@ -43,12 +44,14 @@ services:
   producer_vibration:
     build:
       context: .
-    container_name: producer_vibration
     depends_on:
       - kafka
+    env_file:
+      - .env
     environment:
-      KAFKA_BROKER: "kafka:9092"
-      PRODUCER_TOPIC: "factory.sensors.vibration"
+      KAFKA_BROKER: "${KAFKA_BROKER}"
+      PRODUCER_TOPIC: "${VIB_PRODUCER_TOPIC}"
+      PRODUCER_INTERVAL: "${VIB_PRODUCER_INTERVAL}"
     command: ["./build/vib_producer"]
     networks:
       - kafka_network
@@ -57,13 +60,15 @@ services:
   consumer_temp:
     build:
       context: .
-    container_name: consumer_temp
     depends_on:
       - kafka
+      - producer_temp
+    env_file:
+      - .env
     environment:
-      KAFKA_BROKER: "kafka:9092"
-      CONSUMER_TOPIC: "factory.sensors.temperature"
-      CONSUMER_GROUP: "temp_consumer_group"
+      KAFKA_BROKER: "${KAFKA_BROKER}"
+      CONSUMER_TOPIC: "${TEMP_CONSUMER_TOPIC}"
+      CONSUMER_GROUP: "${TEMP_CONSUMER_GROUP}"
     command: ["./build/temp_consumer"]
     networks:
       - kafka_network
@@ -72,13 +77,15 @@ services:
   consumer_vibration:
     build:
       context: .
-    container_name: consumer_vibration
     depends_on:
       - kafka
+      - producer_vibration
+    env_file:
+      - .env
     environment:
-      KAFKA_BROKER: "kafka:9092"
-      CONSUMER_TOPIC: "factory.sensors.vibration"
-      CONSUMER_GROUP: "vib_consumer_group"
+      KAFKA_BROKER: "${KAFKA_BROKER}"
+      CONSUMER_TOPIC: "${VIB_CONSUMER_TOPIC}"
+      CONSUMER_GROUP: "${VIB_CONSUMER_GROUP}"
     command: ["./build/vib_consumer"]
     networks:
       - kafka_network

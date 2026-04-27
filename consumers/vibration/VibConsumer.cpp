@@ -39,7 +39,7 @@ std::string VibConsumer::consume(const Event& event) const {
     std::ostringstream output;
     output << color_prefix
            << "[VIB ]"
-           << " | reading = " << std::left << std::setw(5) << (std::to_string(event.reading) + "mm")
+           << " reading = " << std::left << std::setw(5) << (std::to_string(event.reading) + "mm")
            << " | " << std::setw(8) << flag
            << " | " << action
            << color_reset;

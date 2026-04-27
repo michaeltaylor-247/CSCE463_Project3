@@ -10,7 +10,6 @@
 class KafkaConsumer {
 private:
     RdKafka::KafkaConsumer* consumer_;
-    std::string topic_;
 
     bool deserializeEvent(const RdKafka::Message& message, Event& event) const;
 
